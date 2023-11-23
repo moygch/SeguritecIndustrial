@@ -1,0 +1,74 @@
+{% extends '/planta/base_plantas.html' %}
+
+{% block main%}
+<div class="container h-100">
+    <div class="card shadow  w-100">
+        <div class="card-header py-3 d-flex justify-content-sm-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-dark">Extintores que necesitan realizar PH</h6>
+            <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#extintornew_planta{{id_planta}}">
+                <i class="fas fa-fire-extinguisher "></i>
+                Nuevo exintor
+            </button>
+            
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th style="padding-bottom: 1.2em; margin-top: 0; position: static; top: 10px;">N. Serie</th>
+                            <th style="padding-bottom: 1.2em; margin-top: 0; position: static; top: 10px;">Ubicación</th>                            
+                            <th style="padding-bottom: 1.2em; margin-top: 0; position: static; top: 10px;">Tipo</th>
+                            <th style="padding-bottom: 1.2em; margin-top: 0; position: static; top: 10px;">Capacidad</th>
+                            <th style="padding-bottom: 0;">P.H
+                                <p style="font-size: 12px;">Año-Mes</p>
+                            </th>
+                            <th style="padding-bottom: 1.2em; margin-top: 0; position: static; top: 10px;" >Planta</th>
+                            <th style="padding-bottom: 1.2em; margin-top: 0; position: static; top: 10px;">Validar</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for extintor in extintores %}
+                            {%include '/planta/nuevo_extintor_planta.html' %}
+                            <tr>
+                                <td>{{extintor.n_serie }}</td>
+                                <td style="text-transform: uppercase;">{{extintor.ubicacion }}</td>
+                                <td>{{extintor.tipo }}</td>
+                                <td>{{extintor.capacidad }} KG</td>                   
+                                <td>{{extintor.ph_def}}</td>
+                                <td>{{extintor.planta.ubicacion}} {{extintor.planta.empresa.nombre}}</td>
+                                <td>
+                                    <a href="{{extintor.id}}" class="btn btn-outline-warning" data-toggle="modal" data-target="#extintorupdate{{extintor.id}}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {% include '/planta/update_extintor_planta.html'%}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/bootstrap/js/bootstrap.bundle.js"></script>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message, category in messages %}
+        <script>
+            Swal.fire(
+                '{{message}}',
+                '',
+                '{{ category }}'
+            )
+        </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+
+
+{% endblock %}

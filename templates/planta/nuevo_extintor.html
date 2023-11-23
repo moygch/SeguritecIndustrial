@@ -1,0 +1,50 @@
+<!-- Modal -->
+<div class="modal fade" id="extintornew{{id_planta}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-centered">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: black;">Nuevo extintor</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('nuevo_extintor')}}" method="post" style="color: black;">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput"  placeholder="Numero de serie" value="{{nuevo_extintor}}" disabled>
+                        <label for="floatingInput">Numero de serie</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="tipo" required>
+                          <option value="PQS">Polvo quimico seco</option>
+                          <option value="CO2">Bioxido de carbono</option>
+                          <option value="H2O">Agua</option>
+                        </select>
+                        <label for="floatingSelect">Selecciona el tipo de extintor</label>
+                      </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" name="capacidad" placeholder="" required>
+                        <label for="floatingInput">Capacidad</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" name="ubicacion" placeholder="" required>
+                        <label for="floatingInput">Ubicacion</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" name="ph" placeholder="Año-Mes">
+                        <label for="floatingInput">Prueba Hidrostatica</label>
+                    </div>
+                    
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInput" name="id_planta" value="{{extintor.id_planta}}" hidden>
+                        <input type="text" class="form-control" id="floatingInput" value="{{extintor.planta.empresa.nombre}} {{extintor.planta.ubicacion}}" disabled>
+                        <label for="floatingPassword">Planta</label>
+                      </div>
+               
+            </div>
+            <div class="modal-footer">
+                    <a class="btn btn-secondary" data-dismiss="modal">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" href="#">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

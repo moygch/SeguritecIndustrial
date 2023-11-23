@@ -1,0 +1,88 @@
+{%extends '/admin/base.html'%}
+{%block main%}
+<div class="container h-100 pt-5" >
+    <div class="card shadow  w-100">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-dark">Tabla de usuarios</h6>
+            <a class="btn btn-outline-dark" href="#" data-toggle="modal" data-target="#usernew">
+                <i class="fas fa-user-plus "></i>
+                Nuevo usuario
+            </a>
+            {% include '/admin/modal_nuevoUsuario.html' %}
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center" id="dataTable" width="98%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Usuario</th>
+                            <th>Tipo de usuario</th>
+                            <th>Planta</th>
+                            <th>Acceso</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios: %}
+                        <tr>
+                            <td>{{ usuario.nombre }}</td>
+                            <td>{{ usuario.apellidos }}</td>
+                            <td>{{ usuario.usuario }}</td>
+                            <td>
+                                {% if usuario.tipo == 0 %}
+                                    Administrador
+                                {% elif usuario.tipo == 1 %}
+                                    Administrador de planta
+                                {% else %}
+                                    Técnico 
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if usuario.id_planta == None %}
+                                    Superusuario
+                                {% else %}
+                                    {{usuario.planta.nombre}} {{usuario.planta.ubicacion}}
+                                {%endif %}
+                            </td>
+                            <td>
+                                {% if usuario.acceso == 'True' %}
+                                    <i class="fas fa-check-circle" style="color: green;" ></i>
+                                {% else %}
+                                    <i class="fas fa-times-circle " style="color: red" ></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{usuario.id}}" class="btn btn-outline-warning" href="#" data-toggle="modal" data-target="#actualizarUsuario{{usuario.id}}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% include '/admin/actualizar_usuario.html' %}
+                                <a href="{{usuario.id}}" class="btn btn-outline-danger" href="#" data-toggle="modal" data-target="#eliminarUsuario{{usuario.id}}">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                {% include '/admin/eliminar_usuario.html' %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message, category in messages %}
+        <script>
+          Swal.fire(
+              '{{message}} ',
+              '',
+              '{{category}}'
+          )
+      </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{%endblock%}

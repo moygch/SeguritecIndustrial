@@ -1,0 +1,44 @@
+.radio label{
+    display: inline-block;
+    width: auto;
+    cursor: pointer;
+    color: blue;
+    position: relative;
+    padding: 5px 15px 5px 51px;
+    font-size: .9em;
+    border-radius: 5px;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition:  all 0.3s ease;
+}
+.radio label:hover:hover{
+    background: rgba(126, 196, 243, 0.1);
+}
+.radio label::before{
+    content: "";
+    display: inline-block;
+    height: 17px;
+    width: 17px;
+    position: absolute;
+    left: 15px;
+    border-radius: 50%;
+    background: none;
+    border: 3px solid blue;
+}
+.radio input[type="radio"]{
+    display: none;
+}
+.radio input[type="radio"]:checked + label:before{
+    display: none;
+}
+.radio input[type=radio]:checked + label{
+    padding: 5px 15px;
+    background: blue;
+    border-radius: 2px;
+    color: #fff;
+}
+
+.radia{
+    background-color: rgb(202, 202, 202);
+}

@@ -1,0 +1,72 @@
+<!-- Modal -->
+<div class="modal fade" id="actualizarUsuario{{usuario.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-centered">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: black;">Nuevo usuario</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('update_usuario', id = usuario.id)}}" method="post" style="color: black;">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="{{usuario.nombre}}" value="{{usuario.nombre}}" name="nombre_act" required>
+                        <label for="floatingInput">Nombre completo</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="{{usuario.apellidos}}" value="{{usuario.apellidos}}" name="apellidos_act" required>
+                        <label for="floatingInput">Apellidos</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="{{usuario.usuario}}" value="{{usuario.usuario}}" name="usuario_act" required>
+                        <label for="floatingInput">usuario</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="tipo_act" required>
+                            <option value="{{usuario.tipo}}">
+                                {% if usuario.tipo == 0 %}
+                                    Administrador
+                                {% elif usuario.tipo == 1 %}
+                                    Administrador de planta
+                                {% else %}
+                                    Técnico
+                                {% endif %}
+                            </option>
+                            <option value="0">Administrador</option>
+                            <option value="1">Administrador de planta</option>
+                            <option value="2">Técnico</option>
+                        </select>
+                        <label for="floatingSelect">Selecciona el tipo de usuario</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="planta_acceso" required>
+                            <option value="{{usuario.id_planta}}">{{usuario.planta.nombre}}</option>
+                            {% set plantas = db_session.query(models.Planta).all() %}
+                            {% for planta in plantas %}
+                                <option value="{{planta.id}}">{{planta.nombre}} {{planta.empresa.nombre}} {{planta.ubicacion}}</option>
+                            {%endfor%}
+                            
+                        </select>
+                        <label for="floatingSelect">Selecciona la planta que pertenece</label>
+                    </div>
+
+
+                    <!-- grupo: nivel de usuario --> 
+                    <div style="border: 1px solid rgb(210, 212, 215); border-radius: 5px;">
+                        <label class="floatingInput" style="text-align: start; width: 94%; font-size: 14px;">Acceso</label>
+                        <div class="radio">
+                            <input type="radio" name="acceso" id="true{{usuario.id}}" value="True" {% if usuario.acceso == 'True' %}checked{% endif %}>
+                            <label for="true{{usuario.id}}">Dar acceso</label>
+                            <input type="radio" name="acceso" id="false{{usuario.id}}" value="False" {% if usuario.acceso == 'False' %}checked{% endif %}>
+                            <label for="false{{usuario.id}}">Prohibir acceso</label>
+                        </div>
+                    </div>                                                  
+                                                       
+            </div>
+            <div class="modal-footer">
+                    <a class="btn btn-secondary" data-dismiss="modal">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" href="#">Actualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

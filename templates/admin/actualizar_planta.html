@@ -1,0 +1,34 @@
+<!-- Modal -->
+<div class="modal fade" id="plantaupdate{{lista.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-centered">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: black;">Actualizar {{lista.nombre}} {{lista.ubicacion}}</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('update_planta', id = lista.id )}}" method="post" style="color: black;">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Nombre" name="nombre_act"  value="{{lista.nombre}}">
+                        <label for="floatingInput">Nombre</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="ubicacion" name="ubicacion_act" value="{{lista.ubicacion}}" required>
+                        <label for="floatingInput">Ubicacion planta</label>
+                    </div>
+                    
+                    <div class="form-floating">  
+                        <input type="text" class="form-control" id="floatingInput" name="id_empresa" value="{{lista.id_empresa}}" hidden>                      
+                        <input type="text" class="form-control" id="floatingInput" value="{{lista.empresa.nombre}}" disabled>
+                        <label for="floatingPassword">Empresa</label>
+                      </div>
+               
+            </div>
+            <div class="modal-footer">
+                    <a class="btn btn-secondary" data-dismiss="modal">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" href="#">Actualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+{%extends '/admin/base.html'%}
+
+{%block main%}
+<div class="container h-100 pt-5">
+    <div class="card shadow  w-100">
+        <div class="card-header py-3 d-flex justify-content-sm-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-dark">Tabla de plantas</h6>
+            <a class="btn btn-outline-dark" href="#" data-toggle="modal" data-target="#plantanew">
+                <i class="fas fa-industry "></i>
+                Nueva planta
+            </a>
+            
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center" id="dataTable" width="98%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Ubicacion</th>
+                            <th>Total de exintores</th>
+                            <th>Nombre de la empresa</th>
+                            <th>Ver exintores</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for lista in lista %}
+                            {% set num_extintores = db_session.query(models.Extintor).filter_by(id_planta=lista.id).count() %}
+                            {% include '/admin/nueva_planta.html'%}
+                            <tr>
+                                <td>{{ lista.nombre }}</td>
+                                <td>{{ lista.ubicacion }}</td>
+                                <td>{{ num_extintores }}</td>                            
+                                <td>{{ lista.empresa.nombre }}</td>
+                                <td>
+                                    <a href="{{url_for('extintores', id = lista.id)}}" style="color: black; font-size: 1.3em;"><i class="fas fa-fire-extinguisher"></i></a>
+                                </td>
+                                <td>
+                                    <a href="{{lista.id}}" class="btn btn-outline-warning" data-toggle="modal" data-target="#plantaupdate{{lista.id}}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {% include '/admin/actualizar_planta.html' %}
+                                    <a href="{{lista.id}}" class="btn btn-outline-danger" data-toggle="modal" data-target="#eliminarPlanta{{lista.id}}">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    {% include '/admin/eliminar_planta.html' %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message, category in messages %}
+        <script>
+          Swal.fire(
+              '{{message}} ',
+              '',
+              '{{category}}'
+          )
+      </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{%endblock%}

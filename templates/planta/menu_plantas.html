@@ -1,0 +1,80 @@
+<ul class="navbar-nav sidebar sidebar-dark accordion pt-3 color-menu" style="background:  #ee0101;" id="accordionSidebar">
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="http://www.seguritecindustrial.com/index.html">
+        <div class="sidebar-brand-icon">
+            <img src="../static/img/logo-removebg-preview (1).ico" width="50%" alt="">
+        </div>
+    </a>
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link" href="{{url_for('dashboard_planta')}}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Interface
+    </div>   
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Servicios</span>
+        </a>
+        <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">lista de Servicios:</h6>
+                <a class="collapse-item" href="{{url_for('extintores_plantas', id = user.id_planta)}}">Extitores</a>
+                <a class="collapse-item" href="">Hidrantes</a>
+                <a class="collapse-item" href="">Alarmas</a>
+                <a class="collapse-item" href="">Otros</a>
+            </div>
+        </div>
+    </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Procesos
+    </div>  
+    <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseProcesos"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Mantenimientos</span>
+        </a>
+        <div id="collapseProcesos" class="collapse" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">lista de mantenimientos:</h6>
+                <a class="collapse-item" href="{{url_for('extintores_ph_planta', id = user.id_planta)}}">Prueba hidrostatica</a>
+                <a class="collapse-item" href="">Mantenimiento preventivo</a>
+            </div>
+        </div>
+    </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Sistema
+    </div>    
+    
+    <!-- Nav Item - Tables -->
+    <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Reportes</span></a>
+    </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>

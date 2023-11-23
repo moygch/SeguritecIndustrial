@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>control de acceso</title>
+  <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='/img/favicon.ico') }}" >
+  <link rel="stylesheet" href="{{ url_for('static', filename='/css/style_login.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='/css/bootstrap.css') }}">
+  <script src="{{ url_for('static', filename='/js/SweetAlert2.js') }}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+</head>
+
+<body onload="deshabilitaRetroceso()"></body>>
+
+<main>
+
+  <div class="contendor__todo">
+    <div class="caja__trasera">
+      <div class="caja__trasera-login">
+        <h3>¿Ya tienes una cuenta?</h3>
+        <p>Inicia sesión para acceder</p>
+        <button id="btn__iniciar-sesion">Iniciar Sesión</button>
+      </div>
+      <div class="caja__trasera-register">
+        <h3>¿Aun no tienes una cuenta?</h3>
+        <p>Registrate para Acceder</p>
+        <button id="btn__registrarse">Registrarme</button>
+      </div>
+    </div>
+
+    <!--Formulario de login y Registro-->
+    <div class="contenedor__login-register">
+
+      <!--Login-->
+      <form action="{{url_for('login_post')}}" method="POST" class="formulario__login">
+        <img src="{{ url_for('static', filename='/img/logo-removebg-preview.png') }}" class="logo" alt="">
+        <h2>Iniciar Sesión</h2>
+        <input type="text" placeholder="Usuario" name="user">
+        <input type="password" placeholder="Contraseña" name="password">
+        <div class="boton">
+          <button>Acceder</button>
+        </div>
+      </form>
+
+      <!--Registro-->
+      <form action="{{url_for('login_registro_post')}}" method="POST" class="formulario__register">
+        <img src="{{ url_for('static', filename='/img/logo-removebg-preview.png') }}" class="logo" alt="">
+        <h2>Registrate</h2>
+        <input type="text" placeholder="Nombre Completo" name="nombre" required>
+        <input type="text" placeholder="Apellidos" name="apellidos" required>
+        <input type="text" placeholder="Usuario" name="usuario" required>
+        <select name="tipo">
+          <option value="0">Administrador</option>
+          <option value="1">Administrador de planta</option>
+          <option value="0">Técnico</option>
+        </select>
+        <input type="password" placeholder="Contraseña" name="psw" required>
+        <div class="boton">
+          <button>Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+
+</body>
+<script>
+  function deshabilitaRetroceso() {
+    window.location.hash = "no-back-button";
+    window.location.hash = "Again-No-back-button" //chrome
+    window.onhashchange = function () { window.location.hash = "no-back-button"; }
+  }
+  deshabilitaRetroceso();
+</script>
+
+<script src="../static/js/index.js"></script>
+
+{% include '/login/alertas.html' %}
+
+
+
+</html>

@@ -1,0 +1,44 @@
+<!-- Modal -->
+<div class="modal fade" id="usernew" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-centered">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: black;">Nuevo usuario</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('usuario_registro_post')}}" method="post" style="color: black;">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Nombre completo" name="nombre" required>
+                        <label for="floatingInput">Nombre completo</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Apellidos" name="apellidos" required>
+                        <label for="floatingInput">Apellidos</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Usuario" name="usuario" required>
+                        <label for="floatingInput">usuario</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="tipo" required>
+                          <option value="0">Administrador</option>
+                          <option value="1">Administrador de planta</option>
+                          <option value="2">Técnico</option>
+                        </select>
+                        <label for="floatingSelect">Selecciona el tipo de usuario</label>
+                      </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="contraseña" name="psw" required>
+                        <label for="floatingPassword">Contraseña</label>
+                      </div>
+               
+            </div>
+            <div class="modal-footer">
+                    <a class="btn btn-secondary" data-dismiss="modal">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" href="#">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
