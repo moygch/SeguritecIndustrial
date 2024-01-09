@@ -1,11 +1,11 @@
-{% extends '/planta/base_plantas.html' %}
+{% extends '/tecnicos/base.html' %}
 
 {% block main%}
-<div class="container-fluid h-100 ">
+<div class="container-fluid h-100 pt-5 ">
     <div class="card shadow  w-10">
-        <div class="card-header py-3 d-flex justify-content-sm-between align-items-center d-print-none">
+        <div class="card-header d-flex justify-content-sm-between align-items-center d-print-none">
             <h6 class="m-0 font-weight-bold text-dark">Extintores revisados</h6>
-            <button type="button" class="btn btn-outline-success d-block" onclick="imprimirEstructura()">
+            <button type="button" class="btn btn-outline-success d-block" onclick="imprimirEstructuratecnico()">
                 <i class="fa fa-print" aria-hidden="true"></i>
             </button>
             
@@ -106,7 +106,7 @@
 <script src="../static/bootstrap/js/bootstrap.bundle.js"></script>
 
 
-<div class="container h-100 d-none d-print-block" style="color: #111;">
+<div class="container h-100 d-none d-print-block" style="color: #111; position: absolute; top: 3em; left: 2.5em;">
     <div class="row w-100" style="border: 1px solid #111; border-bottom: none;">
         <div class="col-4 p-2">
             <img src="../../static/img/logo-removebg-preview.png" alt="" width="98%">
@@ -133,7 +133,7 @@
         </div>
     </div>
     <div class="row d-block w-100">
-        <table class="table w-100" id="reporte_mensual" >
+        <table class="table w-100" id="reporte_mensual_tecnico" >
             <thead >
                 <tr style="font-size: 11px;">
                     <th style="border: 1px solid #111;  width: 10%;"><p style="position: relative; bottom: 1em;">N. Serie</p></th>
@@ -222,16 +222,16 @@
 </div>
 
 <script>
-    function imprimirEstructura() {
+    function imprimirEstructuratecnico() {
             // Obtén la tabla específica por su identificador
-            var tabla = document.getElementById('reporte_mensual');
+            var tabla = document.getElementById('reporte_mensual_tecnico');
 
             if (tabla) {
                 // Oculta las demás tablas antes de imprimir
-                var todasLasTablas = document.getElementsByTagName('table');
-                for (var i = 0; i < todasLasTablas.length; i++) {
-                    todasLasTablas[i].style.display = 'none';
-                }
+                // var todasLasTablas = document.getElementsByTagName('table');
+                // for (var i = 0; i < todasLasTablas.length; i++) {
+                //     todasLasTablas[i].style.display = 'none';
+                // }
 
                 // Muestra solo la tabla que quieres imprimir
                 tabla.style.display = 'block';
@@ -241,9 +241,9 @@
                 window.print();
 
                 // Restaura la visibilidad de todas las tablas después de imprimir
-                for (var i = 0; i < todasLasTablas.length; i++) {
-                    todasLasTablas[i].style.display = 'table';
-                }
+                // for (var i = 0; i < todasLasTablas.length; i++) {
+                //     todasLasTablas[i].style.display = 'table';
+                // }
             } else {
                 console.error('No se encontró la tabla con el identificador "reporte_mensual"');
             }

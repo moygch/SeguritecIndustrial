@@ -2,12 +2,16 @@ from flask import Flask, render_template, redirect, url_for, request, flash, ses
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import joinedload
 from flask_session import Session
-from sqlalchemy import and_, desc, func
+from sqlalchemy import and_, desc
 from database import db_session, Database, engine
-
-from fpdf import FPDF
+from pdfkit import *
+from datetime import datetime, timedelta
 
 import models
+import locale
+
+# Configurar el idioma a español
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
 app = Flask(__name__)
 
@@ -17,26 +21,32 @@ Session(app)
 
 Database.metadata.create_all(engine)
 
+
+
 # Obtiene la fecha y hora del sistema utilizando func.now()
-fecha_actual = db_session.query(func.now()).scalar()
+# fecha_actual = db_session.query(func.now()).scalar()
+fecha_actual = datetime.today()
 print(f"La fecha_actual es : {fecha_actual}")
 
 # Convierte la fecha_actual a cadena
-fecha_actual_str = fecha_actual.strftime("%Y-%m-%d %H:%M:%S")
+fecha_actual_str = fecha_actual.strftime("%b-%Y-%d %H:%M:%S")
+print(f"{fecha_actual_str}")
+# fecha_actual_str = fecha_actual.strftime("%Y-%m-%d")
+
 
 # Extrae el año
-año = fecha_actual_str[:4]
+año = datetime.now().year
 
-# Extrae el mes
-mes = fecha_actual_str[5:7]
-mes_actual = int(mes)
+
+mes = datetime.now().month
+print(f"el mes actual es {mes}")
 
 
 
 #creamos una lista para acceder a los meses
 meses = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
 # accede al mes seleccionado
-mes_seleccionado = meses[mes_actual]
+mes_seleccionado = meses[mes]
 
 # Imprime el resultado)
 
@@ -44,18 +54,28 @@ mes_seleccionado = meses[mes_actual]
 cant_años = 5
 nueva_fecha = int(año) -  cant_años
 
-buscar = f"{nueva_fecha}-{mes_actual}"
+buscar = f"{año}-{mes}"
 
 print(buscar)
 
+fecha = f"{mes_seleccionado} de {año}"
 
-
-print(f"la fecha convertida es {año} {mes_seleccionado}")
-
+# print(fecha)
 
 @app.get('/')
 def login():
     return render_template('/login/login.html')
+
+@app.get('/man')
+def man():
+    return render_template('fomr.html')
+
+@app.post('/post_man')
+def post_man():
+    man = request.form['manguera']
+    fecha = fecha_actual_str
+
+    return f"el valor del checkbox es {man} {fecha}"
 
 @app.post('/login_post')
 def login_post(): 
@@ -86,7 +106,7 @@ def login_post():
                 elif usuario.tipo == 2:
                     # El usuario es técnico
                     print("El usuario es técnico")
-                    return redirect(url_for('dashboard'))
+                    return redirect(url_for('dashboard_tenico'))
             elif usuario.acceso == 'False':
                 flash(('error', 'El usuario no tiene acceso'))
                 return redirect(url_for('login'))
@@ -283,8 +303,20 @@ def plantas():
 
 # ------------------------ RUTAS PARA PLANTAS -----------------------
 
+@app.get('/ver_detalles')
+def ver_detalles():
+    sesion_iniciada = session.get("usuario_id", False)
+    sesion_user = session.get('usuario_id', None)
+    user = db_session.query(models.Usuario).get(sesion_user)
+
+    if not sesion_iniciada:
+        return redirect(url_for("login"))
+    
+    return render_template('/admin/ver_detalles.html', user = user)
+
 @app.get('/planta/<id>')
 def lista_plantas(id):
+
     sesion_iniciada = session.get("usuario_id", False)
     sesion_user = session.get('usuario_id', None)
     user = db_session.query(models.Usuario).get(sesion_user)
@@ -506,6 +538,10 @@ def delete_extintor(id):
 
     return redirect(url_for('extintores', id = extintor.id_planta))
 
+@app.get('/mantenimientos')
+def manteniminetos():
+    return f"aqui van los matenimientos"
+
 # ------------------------ ADMINISTRADOR DE PLANTAS --------------------
 @app.get('/dashboard-admin-planta')
 def dashboard_planta():
@@ -547,114 +583,9 @@ def extintores_plantas(id):
     return render_template('/planta/datatables-extintores_plantas.html', user = user, 
                            extintores = extintores, id_planta = id, nuevo_extintor = nuevo_extintor)
 
-@app.post('/nuevo-extintor-planta')
-def nuevo_extintor_planta():
-    sesion_iniciada = session.get("usuario_id", False)
 
-    if not sesion_iniciada:
-        return redirect(url_for("login"))
-    
-    ultimo_registro = db_session.query(models.Extintor).order_by(desc(models.Extintor.n_serie)).first()
-    nuevo_extintor = ultimo_registro.n_serie + 1   
-
-    tipo = request.form['tipo']
-    capacidad = request.form['capacidad']
-    ubicacion = request.form['ubicacion']
-    ph = request.form['ph']
-    id_planta = request.form['id_planta']  
-
-    reg_extintor = models.Extintor(
-        n_serie = nuevo_extintor,
-        tipo = tipo,
-        capacidad = capacidad,
-        ubicacion = ubicacion,
-        ph_def = ph,
-        id_planta = id_planta
-    )
-
-    try:
-        db_session.add(reg_extintor)
-        db_session.commit()
-        flash(('Extintor agregado de manera exitosa', 'success'))
-    except SQLAlchemyError as e:
-        db_session.rollback()
-        print('Error al agregar extintor: {}'.format(str(e)))
-    finally:
-        db_session.close()
-
-    return redirect(url_for('extintores_plantas', id = id_planta))
-
-@app.post('/extintor_planta/<id>/update')
-def update_extintor_planta(id):
-    sesion_iniciada = session.get("usuario_id", False)
-
-    if not sesion_iniciada:
-        return redirect(url_for("login"))
-
-    extintor = db_session.query(models.Extintor).get(id)
-
-    if not extintor:
-        flash(('Extintor no encontrado', 'error'))
-        return redirect(url_for('extintores', id=id_planta))
-
-    n_serie_nuevo = request.form['n_serie']
-    tipo = request.form['tipo']
-    capacidad = request.form['capacidad']
-    ubicacion = request.form['ubicacion']
-    ph = request.form['ph']
-    id_planta = request.form['id_planta']
-
-    # Verifica si el nuevo número de serie coincide con otro extintor
-    extintor_existente = db_session.query(models.Extintor).filter_by(n_serie=n_serie_nuevo).first()
-
-    if extintor_existente and extintor_existente.id != id:
-        flash(('El nuevo número de serie coincide con otro extintor, no se puede actualizar', 'warning'))
-    else:
-        # Actualiza los campos directamente
-        if n_serie_nuevo != None and n_serie_nuevo != '':
-            extintor.n_serie = n_serie_nuevo
-        extintor.tipo = tipo
-        extintor.capacidad = capacidad
-        extintor.ubicacion = ubicacion
-        extintor.ph_def = ph
-        try:
-            db_session.commit()
-            flash(('Extintor actualizado de manera exitosa', 'success'))
-        except SQLAlchemyError as e:
-            db_session.rollback()
-            flash(('Error al actualizar extintor: {}'.format(str(e)), 'error'))
-        finally:
-            db_session.close()
-
-    return redirect(url_for('extintores_plantas', id = id_planta))
-
-@app.get('/extintor_planta/<id>/delete')
-def delete_extintor_planta(id):
-    usuario_id = session.get('usuario_id', False)
-
-    if not usuario_id:
-        return redirect(url_for('login'))
-
-    extintor = db_session.query(models.Extintor).get(id)
-
-    if extintor == None:
-        return "No encontrado",404
-    
-    try:
-        db_session.delete(extintor)
-        db_session.commit()
-        flash(('Extintor eliminado de manera exitosa', 'success'))
-
-    except SQLAlchemyError as e:
-        db_session.rollback()
-        print('Error al elimnar extintor: {}'.format(str(e)))
-    finally:
-        db_session.close()
-
-    return redirect(url_for('extintores_plantas', id = extintor.id_planta))
-
-@app.route('/extintores_ph/<id>')
-def extintores_ph_planta(id):
+@app.get('/extintores_revision/<id>')
+def revision_mensual_planta(id):
     sesion_iniciada = session.get("usuario_id", False)
     sesion_user = session.get('usuario_id', None)
     user = db_session.query(models.Usuario).get(sesion_user)
@@ -662,24 +593,145 @@ def extintores_ph_planta(id):
     if not sesion_iniciada:
         return redirect(url_for("login"))
     
-    extintores = db_session.query(models.Extintor).filter(models.Extintor.ph_def.like(f'{buscar}%')).filter_by(id_planta=id).all()
+    extintores = db_session.query(models.Mantenimiento).join(models.Extintor).filter(models.Mantenimiento.fecha.like(f'2024-01%')).filter(models.Extintor.id_planta == id).all()
+
+    fecha_recarga_formateada = None
+    fecha_prox_formateada = None
 
     for extintor in extintores:
-        print(f"{extintor.id} {extintor.n_serie}")
+        fecha_recarga_formateada = extintor.fecha_recarga.strftime("%b-%y")
+        fecha_prox_formateada = extintor.fecha_prox_recarga.strftime("%b-%y")
+        print(f"{extintor.id} {extintor.extintor.n_serie} {fecha_recarga_formateada}")
 
+    return render_template('/planta/extintores_mantenimiento_ph.html', user = user,  fecha = fecha, extintores = extintores,
+                           fecha_recarga_formateada = fecha_recarga_formateada, fecha_prox_formateada = fecha_prox_formateada)
 
-    # Renderizar la plantilla con los extintores que necesitan mantenimiento
-    return render_template('/planta/extintores_mantenimiento_ph.html', user = user, extintores = extintores)
+# ------------------- TECNICOS --------------
+@app.get('/dashboard_tecnico')
+def dashboard_tenico():
+    sesion_iniciada = session.get("usuario_id", False)
+    sesion_user = session.get('usuario_id', None)
+    user = db_session.query(models.Usuario).get(sesion_user)
 
-@app.get('/ver/<id>')
-def ver(id):
+    extintores = db_session.query(models.Extintor).filter_by(id_planta=user.id_planta).all()
 
-    extintor = db_session.query(models.Extintor).filter_by(n_serie = id)
+    num_extintores = len(extintores)
+    co2 = sum(1 for extintor in extintores if extintor.tipo == 'CO2')
+    pqs = sum(1 for extintor in extintores if extintor.tipo == 'PQS')
+    h2o = sum(1 for extintor in extintores if extintor.tipo == 'H2O')
+    clean = sum(1 for extintor in extintores if extintor.tipo == 'ClEAN')
 
-    for extintor in extintor:
-        
+    if not sesion_iniciada:
+        return redirect(url_for("login"))
     
-        return f"Este es el exintor{extintor.id}{extintor.n_serie} {extintor.capacidad}KG {extintor.planta.empresa.nombre} {extintor.planta.nombre} {extintor.planta.ubicacion}"
+    return render_template('/tecnicos/dashboard_tecnicos.html', user = user, num_extintores = num_extintores,
+                           co2 = co2, pqs = pqs, h2o = h2o, clean = clean)
+
+@app.get('/tecnico-extintores-plantas/<id>')
+def extintores_plantas_tecnico(id):
+
+    sesion_iniciada = session.get("usuario_id", False)
+    sesion_user = session.get('usuario_id', None)
+    user = db_session.query(models.Usuario).get(sesion_user)
+
+    if not sesion_iniciada:
+        return redirect(url_for("login"))
+    
+    ultimo_registro = db_session.query(models.Extintor).order_by(desc(models.Extintor.n_serie)).first()
+    nuevo_extintor = ultimo_registro.n_serie + 1    
+    extintores = db_session.query(models.Extintor).filter_by(id_planta=id).all()
+    
+    return render_template('/tecnicos/datatables-extintores.html', user = user, 
+                           extintores = extintores, id_planta = id, nuevo_extintor = nuevo_extintor)
+
+@app.post('/revision_mensual')
+def revision_post():
+    sesion_iniciada = session.get("usuario_id", False)
+
+    if not sesion_iniciada:
+        return redirect(url_for("login"))
+    
+    fecha_recarga = request.form.get('fecha_recarga')
+    fecha_prox = request.form['recarga_new']                               
+    manometro = request.form['manometro']
+    manguera = request.form['manguera']
+    seguro = request.form['estado']
+    estado = request.form['estado']
+    recarga = request.form['recarga']
+    señalamiento = request.form['señalamiento']
+    ph = request.form['ph']
+    limpieza = request.form['limpieza']
+    observaciones = request.form['observaciones']
+    id_extintor = request.form['id_extintor']
+    id_planta = request.form['id_planta']
+    n_serie = request.form['n_serie']
+
+
+    # Número de serie a verificar
+    numero_serie_a_verificar = int(n_serie)
+
+    # Realiza la consulta
+    extintores_del_mes = (
+        db_session.query(models.Mantenimiento)
+        .filter(models.Mantenimiento.fecha.like(f'{buscar}%')).all()
+    )
+
+    # # Verifica si el número de serie coincide
+    numero_serie_coincide = any(extintor.extintor.n_serie == numero_serie_a_verificar for extintor in extintores_del_mes)
+
+    if numero_serie_coincide:
+        flash(('El número de serie coincide con un extintor del mes actual.', 'warning'))
+        return redirect(url_for('extintores_plantas_tecnico', id = id_planta))
+    else:        
+        revision = models.Mantenimiento(
+            fecha = datetime.today(),
+            fecha_recarga = fecha_recarga,
+            fecha_prox_recarga = fecha_prox,
+            manometro = manometro,
+            manguera = manguera,
+            seguro = seguro,
+            recarga = recarga,
+            limpieza = limpieza,
+            ph = ph,
+            señalamiento = señalamiento,
+            estado = estado,
+            Observaciones = observaciones,
+            id_extintor = id_extintor
+        )
+
+        try:
+            db_session.add(revision)
+            db_session.commit()
+            flash(('Revision realizada de manera exitosa', 'success'))
+        except SQLAlchemyError as e:
+            db_session.rollback()
+            print('Error al revisar extintor: {}'.format(str(e)))
+        finally:
+            db_session.close()
+
+        return redirect(url_for('extintores_plantas_tecnico', id = id_planta))
+    
+@app.get('/extintores_revision_tecnico/<id>')
+def revision_mensual_tecnico(id):
+    sesion_iniciada = session.get("usuario_id", False)
+    sesion_user = session.get('usuario_id', None)
+    user = db_session.query(models.Usuario).get(sesion_user)
+
+    if not sesion_iniciada:
+        return redirect(url_for("login"))
+    
+    extintores = db_session.query(models.Mantenimiento).join(models.Extintor).filter(models.Mantenimiento.fecha.like(f'2024-01%')).filter(models.Extintor.id_planta == id).all()
+
+    fecha_recarga_formateada = None
+    fecha_prox_formateada = None
+
+    for extintor in extintores:
+        fecha_recarga_formateada = extintor.fecha_recarga.strftime("%b-%y")
+        fecha_prox_formateada = extintor.fecha_prox_recarga.strftime("%b-%y")
+        print(f"{extintor.id} {extintor.extintor.n_serie} {fecha_recarga_formateada}")
+
+    return render_template('/tecnicos/extintores_mantenimiento_ph.html', user = user,  fecha = fecha, extintores = extintores,
+                           fecha_recarga_formateada = fecha_recarga_formateada, fecha_prox_formateada = fecha_prox_formateada)
 
 # --------------------MODULO DE CERRAR SESION PARA TODOS ----------------------------
 @app.get('/logout')
@@ -701,63 +753,8 @@ def logout():
         print(f'Error al cerrar sesión: {str(e)}', 'error')
         return redirect(url_for('login'))
 
+
+
 # -------------------------------- Reportes PDF ----------------------------------
-@app.route('/generar_pdf/')
-def generar_pdf():
-    class MyPDF(FPDF):
-        def header(self):
-            # Encabezado
-            self.set_font('Arial', 'B', 12)
-            self.cell(0, 10, 'Informe', 0, 1, 'C')
-
-        def chapter_title(self, title):
-            # Título del capítulo
-            self.set_font('Arial', 'B', 12)
-            self.cell(0, 10, title, 0, 1, 'L')
-            self.ln(4)
-
-        def chapter_body(self, body):
-            # Cuerpo del capítulo
-            self.set_font('Arial', '', 12)
-            self.multi_cell(0, 10, body)
-
-    # Crear instancia de la clase MyPDF
-    pdf = MyPDF()
-
-    # Agregar página
-    pdf.add_page()
-
-    # Título del informe
-    pdf.set_font('Arial', 'B', 16)
-    pdf.cell(0, 10, 'Mi Informe', 0, 1, 'C')
-    pdf.ln(10)
-
-    # Tabla con encabezado
-    pdf.set_fill_color(200, 220, 255)
-    pdf.set_font('Arial', 'B', 12)
-    pdf.cell(30, 10, 'Nombre', 1)
-    pdf.cell(30, 10, 'Ubicación', 1)
-    pdf.ln()
-
-    # Datos de ejemplo
-    data = [
-        ('Planta 1', 'Ubicación 1'),
-        ('Planta 2', 'Ubicación 2'),
-        # Puedes agregar más filas según tus datos
-    ]
-
-    pdf.set_font('Arial', '', 12)
-
-    for row in data:
-        pdf.cell(30, 10, row[0], 1)
-        pdf.cell(30, 10, row[1], 1)
-        pdf.ln()
-        
-    
-    response = make_response(pdf.output(dest='S').encode('latin1'))
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline; filename=informe.pdf'
-
-    return response
 
 app.run("0.0.0.0",8000,debug=True)

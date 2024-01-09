@@ -10,49 +10,66 @@
     <link rel="icon" type="image/jpg" href="/static/img/favicon.ico"/>
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="../static/css/bootstrap.css">
-    <link rel="stylesheet" href="../static/css/sb-admin-2.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="../static/css/radio.css">
+    <link rel="stylesheet" href="../static/css/sb-admin-2.min.css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='/fontawesome/fontawesome.css') }}"> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
     <script src="../static/js/SweetAlert2.js"></script>
-    <script src="../../static/js/Chart/chartjs.min.js"></script>
+    <script src="../static/js/Chart/chartjs.min.js"></script>
+    
+
 </head>
 
-<body id="page-to" onload="deshabilitaRetroceso()">
+<body id="page-to" style="background-color: #fff;" onload="deshabilitaRetroceso()" >
 
-    <div class="container-fluid ps-0 pe-0 ">
+    <div class="container-fluid ps-0 pe-0">
         <!-- Page Wrapper -->
         <div id="wrapper">
 
             <!-- Sidebar -->
 
-            {% include '/planta/menu_plantas.html'%}
+            {% include '/tecnicos/menu.html'%}
 
             <!-- End of Sidebar -->
-            
+
+
             <!-- Content Wrapper -->
             <div id="content-wrapper" class="d-flex flex-column">
 
                 <!-- Main Content -->
-                <div id="content" class="d-print-none">
+                <div id="content">
 
                     <!-- Topbar -->
-                    {%include '/planta/barra_plantas.html'%}
+                    {%include '/tecnicos/barra.html'%}
                     <!-- End of Topbar -->
+
+
 
                 </div>
                 <!-- End of Main Content -->
                 {% block main%}
 
+
                 {%endblock%}
 
             </div>
             <!-- End of Content Wrapper -->
+
+
         </div>
-    </div> 
+    </div>
+
+  
+
 
     <!-- Logout Modal-->
     {% include 'logout.html' %}
+
+
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="../static/js/jquery.min.js"></script>
@@ -61,8 +78,18 @@
     <!-- Custom scripts for all pages-->
     <script src="../static/js/bootstrap.bundle.js"></script>
     <script src="../static/js/datatables/jquery.dataTables.js"></script>
+
     <script src="../static/js/datatables-demo.js"></script>
+
+    
+    <script src="../../static/js/canvas.js"></script>
+
+
+    
+
+
 </body>
+
 <script>
     function deshabilitaRetroceso(){
       window.location.hash="no-back-button";
@@ -70,6 +97,6 @@
       window.onhashchange=function(){window.location.hash="no-back-button";}
   }
   deshabilitaRetroceso();
-</script>
+  </script>
 
 </html>

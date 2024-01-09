@@ -1,0 +1,139 @@
+<!-- Modal -->
+<div class="modal fade" id="revision{{extintor.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-centered">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: black;">Nuevo usuario</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('revision_post')}}" method="post" class="text-dark">
+                    <input type="hidden" name="id_extintor" value="{{extintor.id}}">
+                    <input type="hidden" name="id_planta" value="{{extintor.id_planta}}">
+                    <input type="hidden" name="n_serie" value="{{extintor.n_serie}}">
+                    <div class="form-floating mb-2">                        
+                        <input type="date" class="form-control" id="fechaRecarga" placeholder="Fecha de recarga" name="fecha_recarga" required>
+                        <label for="fechaRecarga">Recarga</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="date" class="form-control" id="fechaProximaRecarga" placeholder="recarga_new" name="recarga_new" required>
+                        <label for="fechaProximaRecarga">Proxima recarga</label>
+                    </div>                   
+                    <div style="border: 1px solid rgb(210, 212, 215); border-radius: 5px;" class="mb-2">
+                        <label class="floatingInput"
+                            style="text-align: start; width: 94%; font-size: 14px;">Manometro</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="manometro" id="manometro1{{extintor.id}}"" value="0">
+                            <label class="form-check-label pe-5" for="manometro1{{extintor.id}}"">
+                                Mal estado
+                            </label>
+                            <input class="form-check-input" type="radio" name="manometro" id="manometro2{{extintor.id}}"" value="1">
+                            <label class="form-check-label mb-2" for="manometro2{{extintor.id}}"">
+                                Buen estado
+                            </label>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid rgb(210, 212, 215); border-radius: 5px;" class="mb-2">
+                        <label class="floatingInput"
+                            style="text-align: start; width: 94%; font-size: 14px;">Manguera</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="manguera" id="manguera1{{extintor.id}}"" value="0">
+                            <label class="form-check-label pe-5" for="manguera1{{extintor.id}}"">
+                                Mal estado
+                            </label>
+                            <input class="form-check-input" type="radio" name="manguera" id="manguera2{{extintor.id}}"" value="1">
+                            <label class="form-check-label mb-2" for="manguera2{{extintor.id}}"">
+                                Buen estado
+                            </label>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid rgb(210, 212, 215); border-radius: 5px;" class="mb-2">
+                        <label class="floatingInput"
+                            style="text-align: start; width: 94%; font-size: 14px;">Seguro</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="seguro" id="seguro1{{extintor.id}}"" value="0">
+                            <label class="form-check-label pe-5" for="seguro1{{extintor.id}}"">
+                                Mal estado
+                            </label>
+                            <input class="form-check-input" type="radio" name="seguro" id="seguro2{{extintor.id}}"" value="1">
+                            <label class="form-check-label mb-2" for="seguro2{{extintor.id}}"">
+                                Buen estado
+                            </label>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid rgb(210, 212, 215); border-radius: 5px;" class="mb-2">
+                        <label class="floatingInput"
+                            style="text-align: start; width: 94%; font-size: 14px;">Estado</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="estado" id="estado1{{extintor.id}}"" value="0">
+                            <label class="form-check-label pe-5" for="estado1{{extintor.id}}"">
+                                Mal estado
+                            </label>
+                            <input class="form-check-input" type="radio" name="estado" id="estado2{{extintor.id}}"" value="1">
+                            <label class="form-check-label mb-2" for="estado2{{extintor.id}}"">
+                                Buen estado
+                            </label>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid rgb(210, 212, 215); border-radius: 5px;" class="mb-2">
+                        <label class="floatingInput"
+                            style="text-align: start; width: 94%; font-size: 14px;">Recarga</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="recarga" id="recarga1{{extintor.id}}"" value="0">
+                            <label class="form-check-label pe-5" for="recarga1{{extintor.id}}"">
+                                Buen estado
+                            </label>
+                            <input class="form-check-input" type="radio" name="recarga" id="recarga2{{extintor.id}}"" value="1">
+                            <label class="form-check-label mb-2" for="recarga2{{extintor.id}}"">
+                                Recarga
+                            </label>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid rgb(210, 212, 215); border-radius: 5px;" class="mb-2">
+                        <label class="floatingInput"
+                            style="text-align: start; width: 94%; font-size: 14px;">señalamiento</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="señalamiento" id="señalamiento1{{extintor.id}}""
+                                value="0">
+                            <label class="form-check-label pe-5" for="señalamiento1{{extintor.id}}"">
+                                Mal estado
+                            </label>
+                            <input class="form-check-input" type="radio" name="señalamiento" id="señalamiento2{{extintor.id}}""
+                                value="1">
+                            <label class="form-check-label mb-2" for="señalamiento2{{extintor.id}}"">
+                                Buen estado
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="ph" name="ph" required>
+                        <label for="floatingInput">Prueba Hidrostatica</label>
+                    </div>
+                    <div style="border: 1px solid rgb(210, 212, 215); border-radius: 5px;" class="mb-2">
+                        <label class="floatingInput" style="text-align: start; width: 94%; font-size: 14px;">Limpieza
+                            general</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="limpieza" id="limpieza1{{extintor.id}}"" value="0">
+                            <label class="form-check-label pe-5" for="limpieza1{{extintor.id}}"">
+                                Mal estado
+                            </label>
+                            <input class="form-check-input" type="radio" name="limpieza" id="limpieza2{{extintor.id}}" value="1">
+                            <label class="form-check-label mb-2" for="limpieza2{{extintor.id}}"">
+                                Buen estado
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-floating">
+                        <textarea class="form-control" id="floatingTextarea2" style="height: 90px" name="observaciones"></textarea>
+                        <label for="floatingTextarea2">Observaciones</label>
+                      </div>
+
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Cancelar</a>
+                <button type="submit" class="btn btn-primary" href="#">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

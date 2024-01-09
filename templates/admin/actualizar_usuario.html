@@ -39,7 +39,7 @@
                     </div>
                     <div class="form-floating mb-2">
                         <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="planta_acceso" required>
-                            <option value="{{usuario.id_planta}}">{{usuario.planta.nombre}}</option>
+                            <option value="{{usuario.id_planta}}">{{usuario.planta.nombre}}  {{usuario.planta.ubicacion}}</option>
                             {% set plantas = db_session.query(models.Planta).all() %}
                             {% for planta in plantas %}
                                 <option value="{{planta.id}}">{{planta.nombre}} {{planta.empresa.nombre}} {{planta.ubicacion}}</option>

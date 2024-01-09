@@ -1,11 +1,11 @@
-{%extends '/planta/base_plantas.html'%}
+{%extends '/tecnicos/base.html'%}
 {%block main%}
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-black">Bienvenido administrador a <p
+        <h1 class="h3 mb-0 text-black">Bienvenido tecnico a <p
                 style="display: inline; text-transform: lowercase;">{{user.planta.nombre}} {{user.planta.ubicacion}}
                 {{user.planta.empresa.nombre}}</p>
         </h1>
@@ -103,7 +103,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
-                    <h6 class="m-0 font-weight-bold text-black">Resumen de mantenimientos</h6>
+                    <h6 class="m-0 font-weight-bold text-black">Resumen de revisiones</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="shadow-success border-radius-lg py-3 pe-1 bg bg-gradient-dark" style=" margin: 1em; border-radius: 5px;">
@@ -165,6 +165,8 @@ var myPieChart = new Chart(ctx, {
         cutoutPercentage: 80,
     },
 });
+
+
 
 var ctx2 = document.getElementById("area_admin").getContext("2d");
 

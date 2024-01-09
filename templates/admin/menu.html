@@ -27,13 +27,10 @@
             <span>Cientes</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-
-                <h6 class="collapse-header">Vista General</h6>
-                <a class="collapse-item" href="{{url_for('plantas')}}" style="font-size: 11px; text-transform: uppercase;">clientes</a>
+            <div class="bg-white py-2 collapse-inner rounded">                
                 <h6 class="collapse-header">Lista de Clientes</h6>
                 <a class="collapse-item" href="{{ url_for('lista_plantas', id = 1) }}" style="font-size: 11px; text-transform: uppercase;">Bonafont</a>
-                <a class="collapse-item" href="{{ url_for('lista_plantas', id = 2) }}" style="font-size: 11px; text-transform: uppercase;">Pfizer</a>
+                <a class="collapse-item" href="{{ url_for('ver_detalles') }}" style="font-size: 11px; text-transform: uppercase;">Pfizer</a>
                 <a class="collapse-item" href="{{ url_for('lista_plantas', id = 3) }}" style="font-size: 11px; text-transform: uppercase;">neslte mexico s.a. de c.v.</a>
             </div>
         </div>
@@ -49,7 +46,7 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">lista de Servicios:</h6>
-                <a class="collapse-item" href="">Extitores</a>
+                <a class="collapse-item" href="{{url_for('dashboard')}}">Extitores</a>
                 <a class="collapse-item" href="">Hidrantes</a>
                 <a class="collapse-item" href="">Alarmas</a>
                 <a class="collapse-item" href="">Otros</a>

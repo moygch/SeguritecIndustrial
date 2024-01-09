@@ -42,7 +42,6 @@ class Extintor(Database):
     tipo = Column(String(8))
     capacidad = Column(Float(3))
     ubicacion = Column(String(40))
-    ph_def = Column(String(7))
 
     id_planta = Column(Integer, ForeignKey('plantas.id'), nullable=False)
     planta = relationship('Planta')
@@ -51,25 +50,18 @@ class Mantenimiento(Database):
     __tablename__ = 'mantenimientos'
     
     id = Column(Integer, primary_key=True)
+    fecha = Column(Date)
     fecha_recarga = Column(Date)
     fecha_prox_recarga = Column(Date)
-    manometro = Column(String(10))
-    manguera = Column(String(10))
-    seguro = Column(String(10))
-    recarga = Column(String(10))
-    ph = Column(String(10))
-    limpieza = Column(String(50))
+    manometro = Column(Integer)
+    manguera = Column(Integer)
+    seguro = Column(Integer)
+    recarga = Column(Integer)
+    limpieza = Column(Integer)
+    ph = Column(String(7))
+    señalamiento = Column(Integer)
+    estado = Column(Integer)
+    Observaciones = Column(String(200))
     
-    id_extintor = Column(Integer, ForeignKey('extintores.id'), nullable=False)
-    extintor = relationship('Extintor')
-   
-class Ph(Database):
-    __tablename__ = 'ph'
-
-    id = Column(Integer, primary_key=True)
-    ph_ant = Column(String(10))
-    ph_new = Column(String(10))
-    fecha = Column(Date)
-
     id_extintor = Column(Integer, ForeignKey('extintores.id'), nullable=False)
     extintor = relationship('Extintor')
